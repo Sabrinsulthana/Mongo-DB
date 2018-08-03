@@ -1,0 +1,641 @@
+first u need to insatll mongo DB in your system
+      
+      --->after the installation u can check with this commands
+      
+        ---> db.test.save( { a: 1 } )
+        
+            --->  db.test.find()
+            
+                  { "_id" : ObjectId(5879b0f65a56a454), "a" : 1 }
+    INSTALLATION STEPS IN UBUNTU
+
+  i) sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  
+  ii) echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' 
+     | sudo tee /etc/apt/sources.list.d/mongodb.list
+     
+  iii) sudo apt-get update
+  
+  iv)  apt-get install mongodb-10gen = 2.2.3
+    
+   V)  sudo service mongodb start 
+   
+   vi) sudo service mongodb stop
+   
+   vii)  mongo
+   
+   use DROPdatabase
+     
+  -->use DATABASE_NAME
+
+  -->use mydb
+    
+  -->db.dropDatabase()
+
+    { "dropped" : "mydb", "ok" : 1 }
+   
+  -->show dbs
+  
+      create collection method
+  
+  ---> db.createCollection(name, options)
+  
+  ---> use test
+  
+  --->switched to db test
+  
+      db.createCollection("mycollection")
+    
+       { "ok" : 1 }
+       
+    ---> db.createCollection("mycol", { capped : true, autoIndexId : true, size : 
+        
+        6142800, max : 10000 } )
+
+        { "ok" : 1 }
+        
+    ---> db.tutorialspoint.insert({"name" : "tutorialspoint"})
+    --->  show collections
+          mycol
+          mycollection
+          system.indexes
+          tutorialspoint
+          
+     ---> db.COLLECTION_NAME.drop()
+     ---> use mydb
+          switched to db mydb
+          show collections
+          mycol
+          mycollection
+          system.indexes
+          tutorialspoint
+    ---> db.mycollection.drop()
+         true
+         
+     ---> show collections
+          mycol
+          system.indexes
+          tutorialspoint
+
+DATATYPES IN MONGO DB:
+
+Min/ Max keys − This type is used to compare a value against the lowest and highest BSON elements.
+
+Timestamp − ctimestamp. This can be handy for recording when a document has been modified or added.
+
+Object − This datatype is used for embedded documents.
+
+Symbol − This datatype is used identically to a string; however, it's generally reserved for languages that use a specific symbol type.
+
+Date − This datatype is used to store the current date or time in UNIX time format. You can specify your own date time by creating object of Date and passing day, month, year into it.
+
+   --> the data() insertion
+   
+   db.COLLECTION_NAME.insert(document)
+   ---> db.mycol.insert({object: (7df ),})
+   
+   
+   AND in MongoDB
+   
+   The pretty method:
+   
+    --->  db.mycol.find().pretty()
+          
+         db.mycol.find(
+        {
+          $and: [
+         
+         {key1: value1}, {key2:value2}
+            ]
+        }
+  ).pretty()
+
+OR in mongo DB:
+
+     ---> db.mycol.find(
+          {
+            $or: [
+              
+              {key1: value1}, {key2:value2}
+                ]
+           }
+).pretty()
+
+EXAMPLE:
+   
+  ---> db.mycol.find({$or:[{"by":"tutorials point"},{"title": "MongoDB Overview"}]}).pretty()
+{
+   "_id": ObjectId(7df78ad8902c),
+   "title": "MongoDB Overview", 
+   "description": "MongoDB is no sql database",
+   "by": "tutorials point",
+   "url": "http://www.tutorialspoint.com",
+   "tags": ["mongodb", "database", "NoSQL"],
+   "likes": "100"
+}
+
+Using AND and OR Together:
+
+  ---> db.mycol.find({"likes": {$gt:10}, $or: [{"by": "tutorials point"},
+   {"title": "MongoDB Overview"}]}).pretty()
+{
+   "_id": ObjectId(7df78ad8902c),
+   "title": "MongoDB Overview", 
+   "description": "MongoDB is no sql database",
+   "by": "tutorials point",
+   "url": "http://www.tutorialspoint.com",
+   "tags": ["mongodb", "database", "NoSQL"],
+   "likes": "100"
+}
+    
+    
+ MongoDB Update() Method
+ 
+  ----> db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+  
+  ----> db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}})
+  
+  ----> db.mycol.find()
+  
+  { "_id" : ObjectId(5983548781331adf45ec5), "title":"New MongoDB Tutorial"}
+  { "_id" : ObjectId(5983548781331adf45ec6), "title":"NoSQL Overview"}
+  { "_id" : ObjectId(5983548781331adf45ec7), "title":"Tutorials Point Overview"}
+  
+  ----> Update Method:
+  
+  db.mycol.update({'title':'MongoDB Overview'},
+   {$set:{'title':'New MongoDB Tutorial'}},{multi:true})
+    
+  ----> save command:
+  
+    db.mycol.save(
+   {
+      "_id" : ObjectId(5983548781331adf45ec7), "title":"Tutorials Point New Topic",
+         "by":"Tutorials Point"
+   }
+)
+
+  ---->The remove() Method
+
+      db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
+
+  ----> Remove Only One
+
+        db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)
+        
+   ----->  Remove All Documents
+   
+        db.mycol.remove()
+  
+        db.mycol.find()
+        
+   -----> 
+      db.mycol.find({},{"title":1,_id:0})
+      
+      {"title":"MongoDB Overview"}
+      
+      {"title":"NoSQL Overview"}
+      
+      {"title":"Tutorials Point Overview"}
+
+    -----> The Limit() Method limiting records:
+    
+          db.mycol.find({ })
+    -----> db.mycol.find({},{"title":1,_id:0}).limit(2)
+
+          {"title":"MongoDB Overview"}
+          
+          {"title":"NoSQL Overview"}
+          
+     ----> MongoDB Skip() Method
+
+          db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+          
+     -----> db.mycol.find({},{"title":1,_id:0}).limit(1).skip(1)
+  
+            {"title":"NoSQL Overview"}
+            
+     -----> The sort() Method
+      
+            db.COLLECTION_NAME.find().sort({KEY:1})
+            
+            db.mycol.find({},{"title":1,_id:0}).sort({"title":-1})
+        
+              {"title":"Tutorials Point Overview"}
+                
+              {"title":"NoSQL Overview"}
+
+              {"title":"MongoDB Overview"}
+              
+              
+       -----> The ensureIndex() Method
+       
+             db.COLLECTION_NAME.ensureIndex({KEY:1})
+             
+             db.mycol.ensureIndex({"title":1})
+
+             db.mycol.ensureIndex({"title":1,"description":-1})
+             
+        ----->  The aggregate() Method
+        
+                db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
+           
+        -----> sum of data:
+        
+                Sums up the defined value from all documents in the collection.
+ 
+                  db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : "$likes"}}}])
+                  
+         ----> avg:
+  
+            Calculates the average of all given values from all documents in the collection.
+            
+            db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$avg : "$likes"}}}])
+            
+         -----> minimum 
+                
+                Gets the minimum of the corresponding values from all documents in the collection.
+         
+                db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$min : "$likes"}}}])
+         
+         ----> maximum
+              
+                maximum of corresponding value from all the documents in the collection.
+                
+                db.mycol.aggregate([{$group: {_id : "$by_user", num_tutorial : {$max : "$likes"}}}])
+                
+           ----> push
+              
+                inserting the array value in the document.
+                
+                db.mycol.aggregate([{$group : {_id : "$by_user", url : {$push: "$url"}}}])
+                
+                
+           ------> addtoset 
+           
+           inserting the value to an array in the document but does not create any duplications
+           
+           db.mycol.aggregate([{$group: {_id : "$by_user", url: {$addtoset : "$url"}}}])
+           
+           -----> first
+           
+                we can get the first code from the source code according to grouping.
+                
+                then we need to apply some previously applied "$sort-stage"
+                
+                db.mycol.aggregate([{$group : {_id : "$by_user", firsturl: {"$first" : "$url"}}}])
+                
+          ----> last
+              
+                can get the last document from the source code according to grouping
+                
+                then we need to apply some previously applied some $sort-stage"
+                
+                db.mycol.aggregate([{$group : {_id : "$by_user" , lasturl: {"$last" : "$url"}}}])
+                
+                
+           ----> project
+           
+           used to select some specific fields from the collections.
+           
+           ----> $unwind 
+           
+           This is used to unwind document that are using arrays. When using an array, the data is kind of pre-joined and this operation will be undone with this to have individual documents again.
+                     
+           with this stage we will increase the amount of documents for the next stage.
+           
+           
+           REPLICATION:           
+           
+           ---> Replication is the process of synchronizing data across multiple servers.
+                
+           ---> Replication provides redundancy and increases data availability
+           
+                with multiple copies of data on different database servers.
+                
+                
+        ----> Set Up a Replica Set
+
+      In this tutorial, we will convert standalone MongoDB instance to a replica set. To convert to replica set, following are the steps −
+
+    Shutdown already running MongoDB server.
+
+    Start the MongoDB server by specifying -- replSet option. Following is the basic syntax of --replSet −
+
+    mongod --port "PORT" --dbpath "YOUR_DB_DATA_PATH" --replSet "REPLICA_SET_INSTANCE_NAME"
+    
+    
+        ---->sharding
+        
+          Sharding is the process of storing data records across multiple machines and
+    
+          it is MongoDB's approach to meeting the demands of data growth.
+          
+          
+       -----> For the backup files We can use the mongo dump command
+      
+          ==>mongodump
+         
+        --->syntax:
+  
+        mongodump --host HOST_NAME --port PORT_NUMBER
+        (example: mongodump --host tutorialspoint.com --port 27017)
+        
+        This commmand will backup all databases of specified mongod instance.
+        
+        ---->syntax:
+        
+        mongodump --dbpath DB_PATH --out BACKUP_DIRECTORY
+        (example:mongodump --dbpath /data/db/ --out /data/backup/)
+        
+        This command will backup only specified database at specified path.
+        
+        --->syntax:
+          mongodump --collection COLLECTION --db DB_NAME
+              (example: mongodump --collection mycol --db test)   
+              
+              This command will backup only specified collection of specified database.
+        
+
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+                
+                
+                
+                
+                
+                
+                
+                
+                
+           
+           
+                
+                
+         
+         
+            
+            
+            
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+              
+              
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+
+
+          
+          
+          
+          
+          
+          
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
+   
+   
+   
+   
+   
+   
+
+
+
+
+
+
+    
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+  
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
