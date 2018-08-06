@@ -17,6 +17,10 @@ first u need to insatll mongo DB in your system
   iii) sudo apt-get update
   
   iv)  apt-get install mongodb-10gen = 2.2.3
+  
+      if u r fail to run the mongo db in your system. Use this command with enable for the service.
+  
+      sudo systemctl enable mongod.service
     
    V)  sudo service mongodb start 
    
